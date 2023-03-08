@@ -1,0 +1,149 @@
+<div *ngIf="!checkout" class="grid grid-cols-2 lg:grid-cols-3 [&>div]:min-h-screen">
+  <div class="col-span-2 p-10">
+    <button backButton mat-icon-button aria-label="regresar" class="text-black">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="divider"></div>
+    <div class="flex flex-col space-y-6">
+      <div *ngFor="let game of getItems()">
+        <div class="card sm:card-side max-w-[300px] sm:max-w-3xl mx-auto bg-base-100 shadow-xl">
+          <figure>
+            <img [src]="game.cover" alt="cover of {{ game.title }}" class="sm:w-28" />
+          </figure>
+          <div class="card-body justify-between">
+            <h2 class="card-title">{{ game.title }}</h2>
+            <span class="text-3xl font-bold text-accent dark:text-white">${{ game.price }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-8">
+      <h1>
+        <span class="text-3xl"> Resumen </span>
+      </h1>
+      <div class="grid grid-cols-2 mt-4">
+        <span>Subtotal</span>
+        <span class="text-end">${{ getSubtotal() }}</span>
+        <span>Impuesto 12%</span>
+        <span class="text-end">${{ getTaxt() }}</span>
+        <div class="divider col-span-2"></div>
+        <span class="text-xl">Total</span>
+        <span class="text-xl text-end">${{ getTotal() }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-span-2 lg:col-span-1">
+    <div class="h-screen w-full lg:w-1/3 lg:fixed p-10 flex flex-col">
+      <div class="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
+        <!-- Payment Method 1 -->
+        <form [formGroup]="cc_data" [ngClass]="{ 'collapse-open': paymentMethod === 'credit-cart' }"
+          class="collapse w-full p-3 border-b border-gray-200">
+          <div class="collapse-title mb-5">
+            <label for="credit-cart" class="flex items-center cursor-pointer">
+              <input type="radio" [checked]="paymentMethod === 'credit-cart'"
+                (change)="changePaymentMethod('credit-cart')" name="payment-method" id="credit-cart"
+                class="radio radio-primary" />
+              <img src="https://leadershipmemphis.org/wp-content/uploads/2020/08/780370.png" class="h-6 ml-3" />
+            </label>
+          </div>
+          <div class="collapse-content">
+            <div class="mb-3">
+              <label class="text-gray-600 font-semibold text-sm mb-2 ml-1">Nombre en la tarjeta</label>
+              <div>
+                <input formControlName="name"
+                  class="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                  placeholder="John Smith" type="text" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="text-gray-600 font-semibold text-sm mb-2 ml-1">Numero de la tarjeta</label>
+              <div>
+                <input formControlName="num"
+                  class="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                  placeholder="0000 0000 0000 0000" type="text" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 space-y-4 min-[446px]:space-y-0 min-[446px]:grid-cols-2 min-[446px]:space-x-4">
+              <div>
+                <label class="text-gray-600 font-semibold text-sm ml-1">Fecha de expiración</label>
+                <div class="flex space-x-2 mt-2">
+                  <select formControlName="exp_day" class="select select-bordered select-sm">
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+                  <select formControlName="exp_month" class="select select-bordered select-sm">
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-600 font-semibold text-sm ml-1">Código de seguridad</label>
+                <div>
+                  <input formControlName="sec"
+                    class="w-14 pl-3 py-1 mt-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                    placeholder="000" type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Payment Method 2 -->
+        <form [formGroup]="paypal_data" [ngClass]="{ 'collapse-open': paymentMethod === 'paypal' }"
+          class="collapse w-full p-3">
+          <div class="collapse-title">
+            <label for="paypal" class="flex items-center cursor-pointer">
+              <input type="radio" [checked]="paymentMethod === 'paypal'" (change)="changePaymentMethod('paypal')"
+                name="payment-method" id="paypal" class="radio radio-primary" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" width="80" class="ml-3" />
+            </label>
+          </div>
+          <div class="collapse-content mb-3">
+            <label class="text-gray-600 font-semibold text-sm mb-2 ml-1">Correo</label>
+            <div>
+              <input formControlName="correo"
+                class="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                placeholder="john_smith@gmail.com" type="text" />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div>
+        <button [disabled]="
+            paymentMethod === 'credit-cart'
+              ? !cc_data.valid
+              : !paypal_data.valid
+          " (click)="paynow()" class="btn btn-primary uppercase block w-full max-w-xs mx-auto rounded-lg">
+          pagar ahora
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="checkout" class="flex justify-center items-center h-screen w-full">
+  <div class="flex flex-col items-center">
+    <span class="uppercase text-5xl">Gracias por su compra</span>
+    <button (click)="regresar()" class="btn btn-primary max-w-xs mt-4">
+      regresar
+    </button>
+  </div>
+</div>

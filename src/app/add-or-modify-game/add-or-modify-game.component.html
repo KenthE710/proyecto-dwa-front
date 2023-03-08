@@ -1,0 +1,19 @@
+<form [formGroup]="newGame" class="flex flex-col p-8 space-y-4">
+  <input type="text" placeholder="Cover" formControlName="cover" class="input input-bordered input-primary w-full" />
+
+  <input type="text" placeholder="Titulo" formControlName="title" class="input input-bordered input-primary w-full" />
+
+  <input type="number" placeholder="Estrellas" formControlName="starts"
+    class="input input-bordered input-primary w-full" />
+
+  <input type="number" placeholder="Precio" formControlName="price" class="input input-bordered input-primary w-full" />
+
+  <div class="flex justify-end space-x-2">
+    <button [disabled]="!newGame.valid" (click)="addOrModifyGame()" class="btn btn-primary">
+      {{ isNewGame() ? "Aceptar" : "Modificar" }}
+    </button>
+    <button color="accent" (click)="cancel()" class="btn btn-ghost">
+      Cancelar
+    </button>
+  </div>
+</form>
