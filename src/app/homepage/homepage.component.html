@@ -1,72 +1,67 @@
 <div>
-        <!-- HEADER -->
-        <mat-toolbar class="bg-transparent flex mt-4 [&>div]:grow">
-                <div class="justify-center hidden sm:flex">
-                        <span class="text-base-content">Epic Games</span>
-                </div>
-                <div>
-                        <label for="game-search"
-                                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                        <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                        </svg>
-                                </div>
-                                <input type="text" id="game-search" [(ngModel)]="game_filter"
-                                        class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg"
-                                        placeholder="Buscar juegos..." />
-                        </div>
-                </div>
-                <div class="flex justify-center">
-                        <div *ngIf="isLogin()" class="space-x-2">
-                                <div class="dropdown dropdown-bottom dropdown-end">
-                                        <label tabindex="0">
-                                                <button mat-icon-button aria-label="menu usuario">
-                                                        <mat-icon>personIcon</mat-icon>
-                                                </button>
-                                        </label>
-                                        <div tabindex="0"
-                                                class="dropdown-content card card-compact w-64 p-2 shadow bg-primary text-primary-content">
-                                                <div class="card-body">
-                                                        <h3
-                                                                class="card-title uppercase pb-2 border-b border-primary-content">
-                                                                {{ getLoggedUser().username }}
-                                                        </h3>
-                                                        <button *ngIf="isAdmin()" (click)="goToAdminDashboard()"
-                                                                class="btn btn-ghost">
-                                                                Panel de administrador
-                                                        </button>
-                                                        <button (click)="logout()" class="btn btn-ghost">
-                                                                Cerrar sesión
-                                                        </button>
-                                                </div>
-                                        </div>
-                                </div>
-
-                                <div class="indicator">
-                                        <span class="indicator-item badge badge-secondary badge-sm">{{
-                                                getCartQuantity()
-                                                }}</span>
-                                        <button mat-icon-button (click)="goToCart()" aria-label="boton carrito">
-                                                <mat-icon>shopping_cart</mat-icon>
-                                        </button>
-                                </div>
-                        </div>
-                        <button *ngIf="!isLogin()" class="btn btn-primary" (click)="goToLogin()">
-                                Iniciar Session
-                        </button>
-                </div>
-        </mat-toolbar>
-
-        <!-- BODY -->
-        <div class="container mx-auto p-12 lg:p-14 xl:p-16">
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        <app-card [game]="game" *ngFor="let game of gameService.games | gameFilter : game_filter"
-                                class="mx-auto"></app-card>
-                </div>
+  <!-- HEADER -->
+  <mat-toolbar class="bg-transparent flex mt-4 [&>div]:grow">
+    <div class="justify-center hidden sm:flex">
+      <span class="text-base-content">Epic Games</span>
+    </div>
+    <div>
+      <label for="game-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
         </div>
+        <input type="text" id="game-search" [(ngModel)]="game_filter"
+          class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg"
+          placeholder="Buscar juegos..." />
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <div *ngIf="isLogin()" class="space-x-2">
+        <div class="dropdown dropdown-bottom dropdown-end">
+          <label tabindex="0">
+            <button mat-icon-button aria-label="menu usuario">
+              <mat-icon>personIcon</mat-icon>
+            </button>
+          </label>
+          <div tabindex="0" class="dropdown-content card card-compact w-64 p-2 shadow bg-primary text-primary-content">
+            <div class="card-body">
+              <h3 class="card-title uppercase pb-2 border-b border-primary-content">
+                {{ getLoggedUser().username }}
+              </h3>
+              <button *ngIf="isAdmin()" (click)="goToAdminDashboard()" class="btn btn-ghost">
+                Panel de administrador
+              </button>
+              <button (click)="logout()" class="btn btn-ghost">
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="indicator">
+          <span class="indicator-item badge badge-secondary badge-sm">{{
+            getCartQuantity()
+            }}</span>
+          <button mat-icon-button (click)="goToCart()" aria-label="boton carrito">
+            <mat-icon>shopping_cart</mat-icon>
+          </button>
+        </div>
+      </div>
+      <button *ngIf="!isLogin()" class="btn btn-primary" (click)="goToLogin()">
+        Iniciar Session
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <!-- BODY -->
+  <div class="container mx-auto p-12 lg:p-14 xl:p-16">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <app-card [game]="game" *ngFor="let game of gameService.games | gameFilter : game_filter"
+        class="mx-auto"></app-card>
+    </div>
+  </div>
 </div>

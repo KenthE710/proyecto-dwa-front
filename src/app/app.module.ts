@@ -11,6 +11,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 
+import { AuthInterceptor } from "./_interceptor/auth/auth.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { HomepageComponent } from "./homepage/homepage.component";
@@ -24,6 +25,7 @@ import { CartComponent } from "./cart/cart.component";
 import { CheckoutComponent } from "./checkout/checkout.component";
 import { AdminComponent } from "./admin/admin.component";
 import { AddOrModifyGameComponent } from "./add-or-modify-game/add-or-modify-game.component";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -54,7 +56,13 @@ import { AddOrModifyGameComponent } from "./add-or-modify-game/add-or-modify-gam
         MatDialogModule,
         MatFormFieldModule,
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule { }

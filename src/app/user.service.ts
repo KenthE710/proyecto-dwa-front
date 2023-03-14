@@ -12,7 +12,7 @@ const LS_KEYS = {
 };
 const DEF_USERS = [
   {
-    username: "admin",
+    username: "kenth",
     password: "123",
     email: "admin@epicgames.com",
     admin: true,
