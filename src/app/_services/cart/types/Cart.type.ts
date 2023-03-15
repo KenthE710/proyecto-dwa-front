@@ -2,7 +2,7 @@ export interface CartItemGame {
   id: number;
   title: string;
   cover: string;
-  price: string;
+  price: number;
   isActive: boolean;
   stock: number;
 }

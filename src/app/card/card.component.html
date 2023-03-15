@@ -24,12 +24,13 @@
       <!-- NUMBER -->
       <span
         class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">{{
-        game.starts }}</span>
+        game.stars }}</span>
     </div>
 
     <div class="flex items-center justify-between">
       <span class="text-3xl font-bold text-accent dark:text-white">${{ game.price }}</span>
-      <button (click)="addToCart()" class="btn btn-secondary">
+      <button (click)="addToCart()" [disabled]="loadingButton" [ngClass]="{ loading: loadingButton }"
+        class="btn btn-secondary">
         Añadir al carro
       </button>
     </div>

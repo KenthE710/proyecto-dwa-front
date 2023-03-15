@@ -5,16 +5,16 @@
     </button>
     <div class="divider"></div>
     <div class="flex flex-col space-y-6">
-      <div *ngFor="let game of getItems()">
+      <div *ngFor="let item of getItems()">
         <div class="card sm:card-side max-w-[300px] sm:max-w-3xl mx-auto bg-base-100 shadow-xl">
           <figure>
-            <img [src]="game.cover" alt="cover of {{ game.title }}" class="sm:w-52" />
+            <img [src]="item.game.cover" alt="cover of {{ item.game.title }}" class="sm:w-52" />
           </figure>
           <div class="card-body justify-between">
-            <h2 class="card-title">{{ game.title }}</h2>
+            <h2 class="card-title">{{ item.game.title }}</h2>
             <div class="card-actions justify-between">
-              <span class="text-3xl font-bold text-accent dark:text-white">${{ game.price }}</span>
-              <button (click)="removeItem(game)" class="btn btn-error">
+              <span class="text-3xl font-bold text-accent dark:text-white">${{ item.game.price }}</span>
+              <button (click)="removeItem(item.game)" class="btn btn-error">
                 Eliminar
               </button>
             </div>
@@ -31,15 +31,15 @@
       <div class="flex-grow">
         <div class="grid grid-cols-2 w-full mt-4">
           <span>Subtotal</span>
-          <span class="text-end">${{ getSubtotal() }}</span>
+          <span class="text-end">${{ getSubtotal().toFixed(2) }}</span>
           <span>Impuesto 12%</span>
-          <span class="text-end">${{ getTaxt() }}</span>
+          <span class="text-end">${{ getTaxt().toFixed(2) }}</span>
         </div>
       </div>
       <div class="flex flex-col">
         <div class="grid grid-cols-2 w-full mb-6 text-xl">
           <span>Total</span>
-          <span class="text-end">${{ getTotal() }}</span>
+          <span class="text-end">${{ getTotal().toFixed(2) }}</span>
         </div>
         <button [disabled]="cartIsEmpty()" (click)="goToCheckout()" class="btn btn-primary w-full">
           Comprar

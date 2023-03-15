@@ -1,12 +1,11 @@
 import { Pipe, PipeTransform } from "@angular/core";
-
-import type { Game } from "./game.service";
+import { GameListItem } from "src/app/_services/game";
 
 @Pipe({
   name: "gameFilter",
 })
 export class GameFilterPipe implements PipeTransform {
-  transform(games: Game[], filter: string): Game[] {
+  transform(games: GameListItem[] | null, filter: string): GameListItem[] {
     if (!games || !games.length) return [];
     if (!filter) return games;
 

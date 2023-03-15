@@ -1,52 +1,69 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { SessionService } from "../session.service";
-import { CartService } from "../cart.service";
-import { GameService } from "../game.service";
+import { AuthService } from "../_services/auth";
+import { CartService } from "../_services/cart";
+import { GameListItem, GameService } from "../_services/game";
 
 @Component({
   selector: "app-homepage",
   templateUrl: "./homepage.component.html",
   styleUrls: ["./homepage.component.css"],
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit {
   game_filter = "";
+  games: GameListItem[] = [];
+  cartQuantity: number = 0;
 
   constructor(
     private router: Router,
-    private sessionService: SessionService,
+    private auth: AuthService,
     private cartService: CartService,
-    public gameService: GameService
+    private gameService: GameService
   ) { }
 
-  isLogin() {
-    return this.sessionService.isLogged();
+  ngOnInit(): void {
+    this.gameService.getGamesList().subscribe((g) => {
+      this.games = g;
+    });
+    this.getCartQuantity();
   }
+
+  private getCartQuantity() {
+    if (this.auth.isAuthenticated()) {
+      this.cartService.getCartInfo(this.auth.getUser()!.id).subscribe((i) => {
+        this.cartQuantity = i.items;
+      });
+    }
+  }
+
+  gameAddToCartEventHandle(_game: GameListItem) {
+    this.getCartQuantity();
+  }
+
+  isLogin() {
+    return this.auth.isAuthenticated();
+  }
+
   isAdmin() {
-    return this.sessionService.getLoggedUser().admin;
+    return false;
   }
 
   logout() {
-    this.sessionService.logout();
-    this.cartService.cleanCart();
-  }
-
-  getCartQuantity() {
-    return this.cartService.quantity;
+    this.auth.logout();
   }
 
   getLoggedUser() {
-    return this.sessionService.getLoggedUser();
+    return this.auth.getUser();
   }
 
   goToLogin() {
-    this.router.navigate(["/login"]);
+    this.router.navigateByUrl("/login");
   }
   goToCart() {
-    this.router.navigate(["/cart"]);
+    this.router.navigateByUrl("/cart");
   }
   goToAdminDashboard() {
-    this.router.navigate(["/admin"]);
+    this.router.navigateByUrl("/admin");
   }
 }

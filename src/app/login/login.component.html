@@ -44,19 +44,19 @@
       <h1 class="my-6 text-white-400 lg:text-base-content">EPIC GAME</h1>
       <form [formGroup]="usuarioLogin" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
         <div class="pb-2 pt-4">
-          <input type="text" name="user" id="user" placeholder="Usuario" formControlName="user"
+          <input type="text" name="user" id="user" placeholder="Usuario" formControlName="username"
             class="input input-bordered input-primary text-black block w-full p-4 text-lg rounded-sm" />
         </div>
         <div class="pb-2 pt-4">
           <input class="input input-bordered input-primary text-black block w-full p-4 text-lg rounded-sm"
-            type="password" name="pass" id="pass" placeholder="Contraseña" formControlName="pass" />
+            type="password" name="pass" id="pass" placeholder="Contraseña" formControlName="password" />
         </div>
         <!-- <div class="text-right text-gray-400 hover:underline hover:text-gray-100"> -->
         <!--   <a href="#">Forgot your password?</a> -->
         <!-- </div> -->
         <div class="px-4 pb-2 pt-4">
           <button class="btn-primary uppercase block w-full p-4 text-lg rounded-full focus:outline-secondary"
-            (click)="onSubmit()">
+            (click)="onSubmit()" [disabled]="isLoading" [ngClass]="{ loading: isLoading }">
             Iniciar Sesión
           </button>
         </div>

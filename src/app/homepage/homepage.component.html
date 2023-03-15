@@ -30,7 +30,7 @@
           <div tabindex="0" class="dropdown-content card card-compact w-64 p-2 shadow bg-primary text-primary-content">
             <div class="card-body">
               <h3 class="card-title uppercase pb-2 border-b border-primary-content">
-                {{ getLoggedUser().username }}
+                {{ getLoggedUser()?.username }}
               </h3>
               <button *ngIf="isAdmin()" (click)="goToAdminDashboard()" class="btn btn-ghost">
                 Panel de administrador
@@ -44,7 +44,7 @@
 
         <div class="indicator">
           <span class="indicator-item badge badge-secondary badge-sm">{{
-            getCartQuantity()
+            cartQuantity
             }}</span>
           <button mat-icon-button (click)="goToCart()" aria-label="boton carrito">
             <mat-icon>shopping_cart</mat-icon>
@@ -60,8 +60,8 @@
   <!-- BODY -->
   <div class="container mx-auto p-12 lg:p-14 xl:p-16">
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <app-card [game]="game" *ngFor="let game of gameService.games | gameFilter : game_filter"
-        class="mx-auto"></app-card>
+      <app-card [game]="game" (gameAddedEvent)="gameAddToCartEventHandle($event)"
+        *ngFor="let game of games | gameFilter : game_filter" class="mx-auto"></app-card>
     </div>
   </div>
 </div>

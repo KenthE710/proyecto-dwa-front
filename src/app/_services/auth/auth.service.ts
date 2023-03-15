@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, of, tap, throwError } from "rxjs";
 
 import { BackendApi } from "src/app/Consts";
-import { Credentials } from "./types";
+import { Credentials, LoginDto, User } from "./types";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -13,44 +13,58 @@ const httpOptions = {
   providedIn: "root",
 })
 export class AuthService {
+  private loginData: LoginDto | null = null;
+
   constructor(private http: HttpClient) { }
 
-  getToken() {
-    return localStorage.getItem("token");
+  private getLoginData(): LoginDto | null {
+    return (
+      this.loginData ?? JSON.parse(localStorage.getItem("login") as string)
+    );
   }
 
-  saveToken(token: string) {
-    localStorage.setItem("token", token);
+  private saveLoginData(data: LoginDto): void {
+    this.loginData = data;
+    localStorage.setItem("login", JSON.stringify(data));
   }
 
-  deleteToken() {
-    localStorage.removeItem("token");
+  private deleteLoginData(): void {
+    this.loginData = null;
+    localStorage.removeItem("login");
   }
 
   isAuthenticated() {
-    return !!this.getToken();
+    return !!this.getLoginData();
   }
 
-  login(credentials: Credentials) {
+  getUser(): User | null {
+    return this.getLoginData()?.user ?? null;
+  }
+
+  getToken(): string | null {
+    return this.getLoginData()?.token ?? null;
+  }
+
+  login(credentials: Credentials): Observable<LoginDto> {
     return this.http
-      .post<string>(BackendApi + "login", credentials, httpOptions)
+      .post<LoginDto>(BackendApi + "login", credentials, httpOptions)
       .pipe(
-        tap((token) => {
-          this.saveToken(String(token));
+        tap((dto) => {
+          this.saveLoginData(dto);
         })
       );
   }
 
   logout(): Observable<any> {
     if (this.isAuthenticated()) {
-      this.deleteToken();
+      this.deleteLoginData();
       return of("ok");
     } else {
       return throwError(() => new Error("No existe token"));
     }
   }
 
-  signin(credentials: Credentials): Observable<string> {
+  signin(credentials: Credentials): Observable<any> {
     return this.http.post<string>(
       BackendApi + "signin",
       credentials,

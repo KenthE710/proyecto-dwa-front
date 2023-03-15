@@ -20,49 +20,53 @@ import { CardComponent } from "./card/card.component";
 import { LoginComponent } from "./login/login.component";
 import { BackButtonDirective } from "./back-button.directive";
 import { SignupComponent } from "./signup/signup.component";
-import { GameFilterPipe } from "./game-filter.pipe";
+import { GameFilterPipe } from "./_filters/game";
 import { CartComponent } from "./cart/cart.component";
 import { CheckoutComponent } from "./checkout/checkout.component";
 import { AdminComponent } from "./admin/admin.component";
 import { AddOrModifyGameComponent } from "./add-or-modify-game/add-or-modify-game.component";
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { SafePipe } from "./_pipes/safe";
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomepageComponent,
-        HeaderComponent,
-        CardComponent,
-        LoginComponent,
-        BackButtonDirective,
-        SignupComponent,
-        GameFilterPipe,
-        CartComponent,
-        CheckoutComponent,
-        AdminComponent,
-        AddOrModifyGameComponent,
-    ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        AppRoutingModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatSnackBarModule,
-        MatCardModule,
-        MatTableModule,
-        MatDialogModule,
-        MatFormFieldModule,
-    ],
-    providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true,
-        },
-    ],
-    bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+    HomepageComponent,
+    HeaderComponent,
+    CardComponent,
+    LoginComponent,
+    BackButtonDirective,
+    SignupComponent,
+    GameFilterPipe,
+    CartComponent,
+    CheckoutComponent,
+    AdminComponent,
+    AddOrModifyGameComponent,
+    SafePipe,
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    // Material Modules
+    MatToolbarModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatTableModule,
+    MatDialogModule,
+    MatFormFieldModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

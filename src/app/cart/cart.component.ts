@@ -1,44 +1,69 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { CartService } from "../cart.service";
-
-import type { Game } from "../game.service";
+import { AuthService } from "../_services/auth";
+import { Cart, CartItemGame, CartService } from "../_services/cart";
 
 @Component({
   selector: "app-cart",
   templateUrl: "./cart.component.html",
   styleUrls: ["./cart.component.css"],
 })
-export class CartComponent {
-  constructor(private router: Router, public cartService: CartService) { }
+export class CartComponent implements OnInit {
+  cart: Cart | null = null;
+
+  constructor(
+    private router: Router,
+    private cartService: CartService,
+    private auth: AuthService
+  ) { }
+
+  ngOnInit(): void {
+    if (this.auth.isAuthenticated()) {
+      this.cartService.getCart(this.auth.getUser()!.id).subscribe((c) => {
+        this.cart = c;
+      });
+    }
+  }
 
   getItems() {
-    console.log(this.cartService.items);
-    return this.cartService.items;
+    return this.cart?.items ?? [];
   }
 
   getSubtotal() {
-    return this.cartService.subTotal.toFixed(2);
+    return this.getItems().reduce((acc, item) => acc + item.game.price, 0);
   }
 
   getTaxt() {
-    return this.cartService.subTotalWithTaxes.toFixed(2);
+    return this.getSubtotal() * 0.12;
   }
 
   getTotal() {
-    return this.cartService.total.toFixed(2);
+    return this.getSubtotal() + this.getTaxt();
   }
 
-  removeItem(game: Game) {
-    this.cartService.removeFromCart(game);
+  removeItem(game: CartItemGame) {
+    if (this.cart != null) {
+      this.cartService
+        .deleteFromCart({
+          cartId: this.cart.id,
+          gameId: game.id,
+        })
+        .subscribe(() => {
+          if (this.cart != null) {
+            this.cart.items = this.cart?.items.filter(
+              (i) => i.game.id !== game.id
+            );
+          }
+        });
+    }
   }
 
   cartIsEmpty() {
-    return this.cartService.isEmpty;
+    return this.cart == null ? true : !this.cart.items.length;
   }
 
   goToCheckout() {
-    this.router.navigate(["/cart/checkout"]);
+    this.router.navigateByUrl("/cart/checkout");
   }
 }
